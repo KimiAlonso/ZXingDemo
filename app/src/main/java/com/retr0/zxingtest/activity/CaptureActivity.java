@@ -70,6 +70,7 @@ import com.retr0.zxingtest.utils.CaptureActivityHandler;
 import com.retr0.zxingtest.utils.FlashUtils;
 import com.retr0.zxingtest.utils.InactivityTimer;
 import com.google.zxing.Result;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
@@ -115,11 +116,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Button bt_flash;
     Button bt_pick;
 
-    String photo_path;
-
     FlashUtils flashUtils;
-
-    ProgressDialog mProgress;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -129,10 +126,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_capture);
 
-        scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
-        scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
-        scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        scanPreview = findViewById(R.id.capture_preview);
+        scanContainer = findViewById(R.id.capture_container);
+        scanCropView = findViewById(R.id.capture_crop_view);
+        scanLine = findViewById(R.id.capture_scan_line);
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
@@ -144,10 +141,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         animation.setRepeatMode(Animation.RESTART);
         scanLine.startAnimation(animation);
 
-        bt_flash = (Button) findViewById(R.id.flash);
+        bt_flash = findViewById(R.id.flash);
         bt_flash.setOnClickListener(this);
 
-        bt_pick = (Button) findViewById(R.id.pick);
+        bt_pick = findViewById(R.id.pick);
         bt_pick.setOnClickListener(this);
 
         flashUtils = new FlashUtils();
@@ -238,12 +235,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //        bundle.putInt("width", mCropRect.width());
 //        bundle.putInt("height", mCropRect.height());
         bundle.putString("result", rawResult.getText());
-
         startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
         setResult(RESULT_OK, new Intent().putExtras(bundle));
 //      Toast.makeText(this, rawResult.getText(), Toast.LENGTH_LONG);
-
-
         finish();
     }
 
@@ -377,10 +371,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 break;
             default:
                 break;
-
         }
-
-
     }
 
 
@@ -404,12 +395,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                         handleDecode(result, new Bundle());
                         Log.e("OK", "handler");
                     }
-
                 }
             }).start();
         }
-
-
         super.onActivityResult(requestCode, resultCode, data);
 
     }
@@ -542,62 +530,5 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
 
         return result;
-
-
     }
-
-    private void encodeYUV420SP(byte[] yuv420sp, int[] argb, int width,
-                                int height) {
-        // 帧图片的像素大小
-        final int frameSize = width * height;
-        // ---YUV数据---
-        int Y, U, V;
-        // Y的index从0开始
-        int yIndex = 0;
-        // UV的index从frameSize开始
-        int uvIndex = frameSize;
-
-        // ---颜色数据---
-//      int a, R, G, B;
-        int R, G, B;
-        //
-        int argbIndex = 0;
-        //
-
-        // ---循环所有像素点，RGB转YUV---
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-
-                // a is not used obviously
-//              a = (argb[argbIndex] & 0xff000000) >> 24;
-                R = (argb[argbIndex] & 0xff0000) >> 16;
-                G = (argb[argbIndex] & 0xff00) >> 8;
-                B = (argb[argbIndex] & 0xff);
-                //
-                argbIndex++;
-
-                // well known RGB to YUV algorithm
-                Y = ((66 * R + 129 * G + 25 * B + 128) >> 8) + 16;
-                U = ((-38 * R - 74 * G + 112 * B + 128) >> 8) + 128;
-                V = ((112 * R - 94 * G - 18 * B + 128) >> 8) + 128;
-
-                //
-                Y = Math.max(0, Math.min(Y, 255));
-                U = Math.max(0, Math.min(U, 255));
-                V = Math.max(0, Math.min(V, 255));
-
-                // NV21 has a plane of Y and interleaved planes of VU each
-                // sampled by a factor of 2
-                // meaning for every 4 Y pixels there are 1 V and 1 U. Note the
-                // sampling is every other
-                // pixel AND every other scanline.
-                // ---Y---
-                yuv420sp[yIndex++] = (byte) Y;
-
-            }
-        }
-    }
-
-
-
 }
