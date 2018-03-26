@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -131,6 +132,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = findViewById(R.id.capture_scan_line);
 
+
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "iconfont.ttf");
+
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
 
@@ -146,6 +150,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         bt_pick = findViewById(R.id.pick);
         bt_pick.setOnClickListener(this);
+        bt_pick.setTypeface(typeFace);
 
         flashUtils = new FlashUtils();
     }
