@@ -117,11 +117,12 @@
 
         <Button
             android:id="@+id/flash"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_below="@+id/capture_crop_view"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="68dp" />
+            android:layout_marginTop="120dp"
+            />
 
 
     </RelativeLayout>

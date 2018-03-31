@@ -147,6 +147,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         bt_flash = findViewById(R.id.flash);
         bt_flash.setOnClickListener(this);
+        bt_flash.setBackgroundResource(R.mipmap.flash0);
 
         bt_pick = findViewById(R.id.pick);
         bt_pick.setOnClickListener(this);
@@ -360,9 +361,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         switch (v.getId()) {
             case R.id.flash:
                 if (isFlashOn) {
+                    bt_flash.setBackgroundResource(R.mipmap.flash0);
                     cameraManager.offLight();
                     isFlashOn = false;
                 } else {
+                    bt_flash.setBackgroundResource(R.mipmap.flash1);
                     cameraManager.openLight();
                     isFlashOn = true;
                 }
