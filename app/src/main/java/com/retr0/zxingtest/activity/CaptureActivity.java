@@ -49,6 +49,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -117,6 +118,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     Button bt_flash;
     Button bt_pick;
 
+    TextView tv_tips;
+
     FlashUtils flashUtils;
 
     @Override
@@ -131,6 +134,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         scanContainer = findViewById(R.id.capture_container);
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = findViewById(R.id.capture_scan_line);
+        tv_tips = findViewById(R.id.tips);
 
 
         Typeface typeFace = Typeface.createFromAsset(getAssets(), "iconfont.ttf");
@@ -362,12 +366,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             case R.id.flash:
                 if (isFlashOn) {
                     bt_flash.setBackgroundResource(R.mipmap.flash0);
+                    tv_tips.setVisibility(View.VISIBLE);
                     cameraManager.offLight();
                     isFlashOn = false;
                 } else {
                     bt_flash.setBackgroundResource(R.mipmap.flash1);
                     cameraManager.openLight();
                     isFlashOn = true;
+                    tv_tips.setVisibility(View.INVISIBLE);
                 }
 
                 Log.e("onClick: falsh", "ok");
